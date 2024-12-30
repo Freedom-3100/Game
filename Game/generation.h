@@ -30,3 +30,4 @@ Room create_room();
 BSPNode* create_bsp_node(Room room);
 BSPNode* space_split(int line, int column, BSPNode* parent);
 void free_bsp_node(BSPNode* node);
+BSPNode* generate_doors(BSPNode* node, int doors_high);

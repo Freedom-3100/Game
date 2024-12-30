@@ -54,33 +54,63 @@ void move_player(Player* player, const char* direction) {
     }
 }
 
+float distance(int cord_x_obj_1, int cord_y_obj_1, int cord_x_obj_2, int cord_y_obj_2)
+{
+    return(sqrt((cord_x_obj_1 - cord_x_obj_2) * (cord_x_obj_1 - cord_x_obj_2) + (cord_y_obj_1 - cord_y_obj_2) * (cord_y_obj_1 - cord_y_obj_2)));
+}
+
 void move_within_room(Player* player, const char* direction) {
-    if (strcmp(direction, "up") == 0 && player->y > 0) {
-        player->y -= 15; // Перемещение на 5 пикселей вверх
+    if (strcmp(direction, "up") == 0 && distance(player->x , player->y , player->x, 0) > 0) {
+        player->y -= 10; // Перемещение на 5 пикселей вверх
     }
-    else if (strcmp(direction, "down") == 0 && player->y < WINDOW_HIGH - 50) {
-        player->y += 15; // Перемещение на 5 пикселей вниз
+    else if (strcmp(direction, "down") == 0 && distance(player->x, player->y, player->x, WINDOW_HIGH) > 40) {
+        player->y += 10; // Перемещение на 5 пикселей вниз
     }
-    else if (strcmp(direction, "left") == 0 && player->x > 0) {
-        player->x -= 15; // Перемещение на 5 пикселей влево
+    else if (strcmp(direction, "left") == 0 && distance(player->x, player->y, 0, player->y) > 0) {
+        player->x -= 10; // Перемещение на 5 пикселей влево
     }
-    else if (strcmp(direction, "right") == 0 && player->x < WINDOW_WIDTH - 50) {
-        player->x += 15; // Перемещение на 5 пикселей вправо
+    else if (strcmp(direction, "right") == 0 && distance(player->x, player->y, WINDOW_WIDTH, player->y) > 30) {
+        player->x += 10; // Перемещение на 5 пикселей вправо
     }
 }
 
+void check_doors(Player* player)
+{
+    
+        if (player->currentRoom->left && distance(player->x, player->y, 0 ,WINDOW_HIGH / 2) < 20)
+        {
+            player->currentRoom->door_left = 1;
+        }
+        else if (player->currentRoom->right && distance(player->x, player->y, WINDOW_WIDTH, WINDOW_HIGH / 2) < 40)
+        {
+            player->currentRoom->door_right = 1;
+        }
+        else if (player->currentRoom->up && distance(player->x, player->y, WINDOW_WIDTH / 2, 0) < 30 )
+        {
+            player->currentRoom->door_up = 1;
+        }
+        else if (player->currentRoom->down && distance(player->x, player->y, WINDOW_WIDTH / 2, WINDOW_HIGH) < 50)
+        {
+            player->currentRoom->door_down = 1;
+        }
+    
+}
 void handle_input(Player* player) {
     SDL_Event event;
     while (SDL_PollEvent(&event)) {
         if (event.type == SDL_QUIT) {
             exit(0); // Выход из программы при закрытии окна
         }
-
+        check_doors(player);
         if (event.type == SDL_KEYDOWN) {
             switch (event.key.keysym.scancode) {
             case SDL_SCANCODE_W:
                 if (player->currentRoom->up && player->currentRoom->door_up) {
                     move_player(player, "up");
+                    player->currentRoom->door_up = 0;
+                    player->currentRoom->door_left = 0;
+                    player->currentRoom->door_down = 0;
+                    player->currentRoom->door_right = 0;
                 }
                 else {
                     move_within_room(player, "up");
@@ -89,6 +119,10 @@ void handle_input(Player* player) {
             case SDL_SCANCODE_A:
                 if (player->currentRoom->left && player->currentRoom->door_left) {
                     move_player(player, "left");
+                    player->currentRoom->door_up = 0;
+                    player->currentRoom->door_left = 0;
+                    player->currentRoom->door_down = 0;
+                    player->currentRoom->door_right = 0;
                 }
                 else {
                     move_within_room(player, "left");
@@ -97,14 +131,23 @@ void handle_input(Player* player) {
             case SDL_SCANCODE_S:
                 if (player->currentRoom->down && player->currentRoom->door_down) {
                     move_player(player, "down");
+                    player->currentRoom->door_up = 0;
+                    player->currentRoom->door_left = 0;
+                    player->currentRoom->door_down = 0;
+                    player->currentRoom->door_right = 0;
                 }
                 else {
                     move_within_room(player, "down");
+
                 }
                 break;
             case SDL_SCANCODE_D:
                 if (player->currentRoom->right && player->currentRoom->door_right) {
                     move_player(player, "right");
+                    player->currentRoom->door_up = 0;
+                    player->currentRoom->door_left = 0;
+                    player->currentRoom->door_down = 0;
+                    player->currentRoom->door_right = 0;
                 }
                 else {
                     move_within_room(player, "right");

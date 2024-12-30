@@ -72,40 +72,72 @@ BSPNode* space_split(int line, int column, BSPNode* parent) {
     switch (direction) {
     case 0: // вниз
         node->down = space_split(line + 1, column, node);
-        if (line < 5)
-        {
-            node->door_down = 1;
-        }
         
         break;
     case 1: // влево
         node->left = space_split(line, column - 1, node);
-        if (column >= 0)
-        {
-            node->door_left = 1;
-        }
         
         break;
     case 2: // вверх
         node->up = space_split(line - 1, column, node);
-        if (line >= 0)
-        {
-            node->door_up = 1;
-        }
         break;
     case 3: // вправо
         
         node->right = space_split(line, column + 1, node);
-        if (column < 5)
-        {
-            node->door_right = 1;
-        }
         break;
     }
 
     return node; // Возвращаем узел
 }
 
+
+BSPNode* generate_doors(BSPNode* node, int doors_high)
+{
+    if (node->right)
+    {
+        for (int x = 1; x < 11; x++)
+        {
+            for (int y = WINDOW_HIGH / 2 - doors_high / 2; y < WINDOW_HIGH / 2 + doors_high / 2; y++)
+            {
+                node->room->matix_room[y * WINDOW_WIDTH + (WINDOW_WIDTH - x)] = 2;
+            }
+        }
+        
+    }
+    if (node->left)
+    {
+        for (int x = 1; x < 11; x++)
+        {
+            for (int y = WINDOW_HIGH / 2 - doors_high / 2; y < WINDOW_HIGH / 2 + doors_high / 2; y++)
+            {
+                node->room->matix_room[y * WINDOW_WIDTH +  x] = 2;
+            }
+        }
+    }
+    if (node->up)
+    {
+        for (int y = 1; y < 11; y++)
+        {
+            for (int x = WINDOW_WIDTH / 2 - doors_high / 2; x < WINDOW_WIDTH / 2 + doors_high / 2; x++)
+            {
+                node->room->matix_room[y * WINDOW_WIDTH + x] = 2;
+            }
+        }
+
+    }
+
+    if (node->down)
+    {
+        for (int y = 1; y < 11; y++)
+        {
+            for (int x = WINDOW_WIDTH / 2 - doors_high / 2; x < WINDOW_WIDTH / 2 + doors_high / 2; x++)
+            {
+                node->room->matix_room[(WINDOW_HIGH - y ) * WINDOW_WIDTH + x] = 2;
+            }
+        }
+    }
+    return node;
+}
 
 void free_bsp_node(BSPNode* node) {
     if (node == NULL) {

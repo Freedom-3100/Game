@@ -2,51 +2,57 @@
 
 
 static void draw_rooms(SDL_Renderer* renderer, BSPNode* room) {
-        //  вот тут надо короче думать как нарисовать по заданной матрице
-        SDL_SetRenderDrawColor(renderer, 255, 255, 255, 255); // Белый цвет
+        //  вот тут надо короче думать как нарисовать по заданной матрице // Белый цвет
         //SDL_RenderDrawRect(renderer, &rect);
+        room = generate_doors(room, 50);
         for (int x = 0; x < WINDOW_WIDTH; x++)
         {
             for (int y = 0; y < WINDOW_HIGH; y++)
             {
                 if (room->room->matix_room[y * WINDOW_WIDTH + x] == 1)
                 {
+                    SDL_SetRenderDrawColor(renderer, 255, 255, 255, 255);
+                    SDL_RenderDrawPoint(renderer, x, y);
+                }
+                else if (room->room->matix_room[y * WINDOW_WIDTH + x] == 2)
+                {
+                    SDL_SetRenderDrawColor(renderer, 255, 255, 0, 255);
                     SDL_RenderDrawPoint(renderer, x, y);
                 }
             }
         }
     }
 
-static void draw_doors(SDL_Renderer* renderer, BSPNode* room) {
-    SDL_SetRenderDrawColor(renderer, 255, 255, 0, 255); // Цвет дверей (желтый)
-
-    int doorWidth = 20; // Ширина двери
-    int doorHeight = 50; // Высота двери
-
-    // Отрисовка двери вверх
-    if (room->door_up && room->up) {
-        SDL_Rect doorUp = { (WINDOW_WIDTH / 2) - (doorWidth / 2), 0, doorWidth, doorHeight };
-        SDL_RenderFillRect(renderer, &doorUp);
-    }
-
-    // Отрисовка двери вниз
-    if (room->door_down && room->down) {
-        SDL_Rect doorDown = { (WINDOW_WIDTH / 2) - (doorWidth / 2), WINDOW_HIGH - doorHeight, doorWidth, doorHeight };
-        SDL_RenderFillRect(renderer, &doorDown);
-    }
-
-    // Отрисовка двери влево
-    if (room->door_left && room->left) {
-        SDL_Rect doorLeft = { 0, (WINDOW_HIGH / 2) - (doorWidth / 2), doorHeight, doorWidth };
-        SDL_RenderFillRect(renderer, &doorLeft);
-    }
-
-    // Отрисовка двери вправо
-    if (room->door_right && room->right) {
-        SDL_Rect doorRight = { WINDOW_WIDTH - doorHeight, (WINDOW_HIGH / 2) - (doorWidth / 2), doorHeight, doorWidth };
-        SDL_RenderFillRect(renderer, &doorRight);
-    }
-}
+//static void draw_doors(SDL_Renderer* renderer, BSPNode* room) {
+//    SDL_SetRenderDrawColor(renderer, 255, 255, 0, 255); // Цвет дверей (желтый)
+//
+//    int doorWidth = 20; // Ширина двери
+//    int doorHeight = 50; // Высота двери
+//
+//    // Отрисовка двери вверх
+//    if (room->up) {
+//        SDL_Rect doorUp = { (WINDOW_WIDTH / 2) - (doorWidth / 2), 0, doorWidth, doorHeight };
+//        SDL_RenderFillRect(renderer, &doorUp);
+//    }
+//
+//    // Отрисовка двери вниз
+//    if ( room->down) {
+//        SDL_Rect doorDown = { (WINDOW_WIDTH / 2) - (doorWidth / 2), WINDOW_HIGH - doorHeight, doorWidth, doorHeight };
+//        SDL_RenderFillRect(renderer, &doorDown);
+//    }
+//
+//    // Отрисовка двери влево
+//    if ( room->left) {
+//        SDL_Rect doorLeft = { 0, (WINDOW_HIGH / 2) - (doorWidth / 2), doorHeight, doorWidth };
+//        SDL_RenderFillRect(renderer, &doorLeft);
+//    }
+//
+//    // Отрисовка двери вправо
+//    if ( room->right) {
+//        SDL_Rect doorRight = { WINDOW_WIDTH - doorHeight, (WINDOW_HIGH / 2) - (doorWidth / 2), doorHeight, doorWidth };
+//        SDL_RenderFillRect(renderer, &doorRight);
+//    }
+//}
 
 void draw()
 {
@@ -94,7 +100,7 @@ void draw()
         dstRect.y = player.y;
         //root = go_room(root, player);
         draw_rooms(renderer, player.currentRoom);
-        draw_doors(renderer, player.currentRoom);
+        //draw_doors(renderer, player.currentRoom);
         // Отрисовка игрока
         render_player(&player, renderer, dstRect);
   
