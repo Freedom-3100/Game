@@ -28,6 +28,7 @@ void move_player(Player* player, const char* direction) {
     // ѕроверка направлени€ и наличие двери
     if (strcmp(direction, "up") == 0 && player->currentRoom->door_up) {
         nextRoom = player->currentRoom->up;
+
     }
     else if (strcmp(direction, "down") == 0 && player->currentRoom->door_down) {
         nextRoom = player->currentRoom->down;
@@ -78,7 +79,7 @@ void handle_input(Player* player) {
         if (event.type == SDL_KEYDOWN) {
             switch (event.key.keysym.scancode) {
             case SDL_SCANCODE_W:
-                if (player->currentRoom != NULL && player->currentRoom->door_up) {
+                if (player->currentRoom->up && player->currentRoom->door_up) {
                     move_player(player, "up");
                 }
                 else {
@@ -86,7 +87,7 @@ void handle_input(Player* player) {
                 }
                 break;
             case SDL_SCANCODE_A:
-                if (player->currentRoom != NULL && player->currentRoom->door_left) {
+                if (player->currentRoom->left && player->currentRoom->door_left) {
                     move_player(player, "left");
                 }
                 else {
@@ -94,7 +95,7 @@ void handle_input(Player* player) {
                 }
                 break;
             case SDL_SCANCODE_S:
-                if (player->currentRoom != NULL && player->currentRoom->door_down) {
+                if (player->currentRoom->down && player->currentRoom->door_down) {
                     move_player(player, "down");
                 }
                 else {
@@ -102,7 +103,7 @@ void handle_input(Player* player) {
                 }
                 break;
             case SDL_SCANCODE_D:
-                if (player->currentRoom != NULL && player->currentRoom->door_right) {
+                if (player->currentRoom->right && player->currentRoom->door_right) {
                     move_player(player, "right");
                 }
                 else {

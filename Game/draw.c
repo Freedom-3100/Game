@@ -70,7 +70,7 @@ void draw()
     playerTexture[0] = IMG_LoadTexture(renderer, "C:/Games/persona_3.png");
     playerTexture[1] = IMG_LoadTexture(renderer, "C:/Games/persona_2.png");
     playerTexture[2] = IMG_LoadTexture(renderer, "C:/Games/persona_1.png");
-    BSPNode* root = space_split(3, 3, NULL);
+    BSPNode* root = space_split(2, 2, NULL);
     Player player;
     init_player(&player, 300, 400, playerTexture, root); // Инициализация игрока
     SDL_Rect dstRect = { player.x, player.y, 40, 40 };

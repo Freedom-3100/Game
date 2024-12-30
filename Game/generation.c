@@ -47,6 +47,10 @@ BSPNode* create_bsp_node(Room room) {
     node->up = NULL;
     node->down = NULL;
     node->parent = NULL;
+    node->door_up = 0;
+    node->door_right = 0;
+    node->door_left = 0;
+    node->door_down = 0;
     return node;
 }
 
@@ -54,7 +58,7 @@ BSPNode* create_bsp_node(Room room) {
 
 BSPNode* space_split(int line, int column, BSPNode* parent) {
     // Проверка выхода за границы
-    if (line < 0 || column < 0 || line == 6 || column == 6) {
+    if (line < 0 || column < 0 || line == 5 || column == 5) {
         printf("Stopping recursion at line: %d, column: %d\n", line, column);
         return NULL;
     }
@@ -67,20 +71,35 @@ BSPNode* space_split(int line, int column, BSPNode* parent) {
 
     switch (direction) {
     case 0: // вниз
-        node->door_down = 1;
         node->down = space_split(line + 1, column, node);
+        if (line < 5)
+        {
+            node->door_down = 1;
+        }
+        
         break;
     case 1: // влево
-        node->door_left = 1;
         node->left = space_split(line, column - 1, node);
+        if (column >= 0)
+        {
+            node->door_left = 1;
+        }
+        
         break;
     case 2: // вверх
-        node->door_up = 1 ;
         node->up = space_split(line - 1, column, node);
+        if (line >= 0)
+        {
+            node->door_up = 1;
+        }
         break;
     case 3: // вправо
-        node->door_right = 1;
+        
         node->right = space_split(line, column + 1, node);
+        if (column < 5)
+        {
+            node->door_right = 1;
+        }
         break;
     }
 
