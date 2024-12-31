@@ -71,19 +71,45 @@ BSPNode* space_split(int line, int column, BSPNode* parent) {
 
     switch (direction) {
     case 0: // вниз
-        node->down = space_split(line + 1, column, node);
+        if (node->parent && node == node->parent->up)
+        {
+            node->left = space_split(line, column - 1, node);
+        }
+        else
+        {
+            node->down = space_split(line + 1, column, node);
+        }
         
         break;
     case 1: // влево
-        node->left = space_split(line, column - 1, node);
-        
+        if (node->parent && node == node->parent->right)
+        {
+            node->down = space_split(line + 1, column, node);
+        }
+        else
+        {
+            node->left = space_split(line, column - 1, node);
+        }
         break;
     case 2: // вверх
-        node->up = space_split(line - 1, column, node);
+        if (node->parent && node == node->parent->down)
+        {
+            node->right = space_split(line, column + 1, node);
+        }
+        else
+        {
+            node->up = space_split(line - 1, column, node);
+        }
         break;
     case 3: // вправо
-        
-        node->right = space_split(line, column + 1, node);
+        if (node->parent && node == node->parent->left)
+        {
+            node->up = space_split(line - 1, column, node);
+        }
+        else
+        {
+            node->right = space_split(line, column + 1, node);
+        }
         break;
     }
 
@@ -93,7 +119,7 @@ BSPNode* space_split(int line, int column, BSPNode* parent) {
 
 BSPNode* generate_doors(BSPNode* node, int doors_high)
 {
-    if (node->right)
+    if (node->right || (node->parent && node == node->parent->left))
     {
         for (int x = 1; x < 11; x++)
         {
@@ -104,7 +130,7 @@ BSPNode* generate_doors(BSPNode* node, int doors_high)
         }
         
     }
-    if (node->left)
+    if (node->left || (node->parent && node == node->parent->right))
     {
         for (int x = 1; x < 11; x++)
         {
@@ -114,7 +140,7 @@ BSPNode* generate_doors(BSPNode* node, int doors_high)
             }
         }
     }
-    if (node->up)
+    if (node->up || (node->parent && node == node->parent->down))
     {
         for (int y = 1; y < 11; y++)
         {
@@ -126,7 +152,7 @@ BSPNode* generate_doors(BSPNode* node, int doors_high)
 
     }
 
-    if (node->down)
+    if (node->down || (node->parent && node == node->parent->up))
     {
         for (int y = 1; y < 11; y++)
         {
