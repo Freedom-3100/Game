@@ -3,6 +3,7 @@
 #include <SDL_image.h>
 #include <png.h>
 #include "generation.h"
+#include "colision.h"
 #define MAX_IMAGES 3
 
 // Определение структуры Player

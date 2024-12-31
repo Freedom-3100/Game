@@ -26,11 +26,13 @@
     <Image Include="..\..\..\..\Desktop\picture.png" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="colision.h" />
     <ClInclude Include="draw.h" />
     <ClInclude Include="generation.h" />
     <ClInclude Include="Player.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="colision.c" />
     <ClCompile Include="draw.c" />
     <ClCompile Include="generation.c" />
     <ClCompile Include="main.c" />

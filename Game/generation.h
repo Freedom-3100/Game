@@ -3,7 +3,7 @@
 #include <stdlib.h>
 #include <time.h>
 #include <stdbool.h>
-#define TEXTURE_SIZE 30
+#define TEXTURE_SIZE 40
 #define WINDOW_WIDTH 800
 #define WINDOW_HIGH 600
 

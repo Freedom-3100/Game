@@ -35,6 +35,9 @@
     <ClInclude Include="generation.h">
       <Filter>Файлы заголовков</Filter>
     </ClInclude>
+    <ClInclude Include="colision.h">
+      <Filter>Файлы заголовков</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Player.c">
@@ -47,6 +50,9 @@
       <Filter>Исходные файлы</Filter>
     </ClCompile>
     <ClCompile Include="generation.c">
+      <Filter>Исходные файлы</Filter>
+    </ClCompile>
+    <ClCompile Include="colision.c">
       <Filter>Исходные файлы</Filter>
     </ClCompile>
   </ItemGroup>
