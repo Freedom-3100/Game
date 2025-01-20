@@ -5,7 +5,7 @@ static void draw_enemy(SDL_Renderer* renderer, Point enemy_cord)
 
 {
     SDL_SetRenderDrawColor(renderer, 255, 0,0, 255);
-    SDL_Rect enemy_rect = { enemy_cord.x , enemy_cord.y, ENEMY_SIZE , ENEMY_SIZE };
+    SDL_Rect enemy_rect = { enemy_cord.x , enemy_cord.y  , ENEMY_SIZE , ENEMY_SIZE };
     SDL_RenderFillRect(renderer, &enemy_rect);
 }
 
@@ -90,7 +90,7 @@ void draw()
   
         // Обновление экрана
         SDL_RenderPresent(renderer);
-        SDL_Delay(1000/60);
+        SDL_Delay(1000/30);
     }
     // Освобождение ресурсов
     free_bsp_node(root);

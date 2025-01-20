@@ -34,7 +34,8 @@ static Enemy* check_state(Enemy* enemy, Point player_cord)
 
 static Point* walk_to_point(int* grid, Point cord_enemy, Point cord_player) {
     // Вызываем BFS с одномерным массивом grid
-    Point* path = BFS(grid, cord_player, cord_enemy);
+    int lenght;
+    Point* path = BFS(grid, cord_enemy, cord_player, &lenght);
     return path;
 }
 
@@ -88,8 +89,8 @@ Point* spawn_enemy(int* grid) {
             if (is_area_free(grid, row, col)) {
                 Point* spawn_point = malloc(sizeof(Point));
                 if (spawn_point != NULL) {
-                    spawn_point->x = col;
-                    spawn_point->y = row;
+                    spawn_point->x = col ;
+                    spawn_point->y = row ;
                     return spawn_point; // Возвращаем координаты верхнего левого угла
                 }
             }

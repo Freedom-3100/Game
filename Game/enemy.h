@@ -2,9 +2,8 @@
 #include "way_search.h"
 #include <stdlib.h>
 #define DISTANCE_TO_STATE 400
-#define DISTANCE_TO_WALK 100
-#define RANGE_LITTLE 80
-#define RANGE_BIG 4
+#define DISTANCE_TO_WALK 150
+#define RANGE_LITTLE 200
 typedef enum {Attack, Patrol, Walk} State;
 
 typedef struct
