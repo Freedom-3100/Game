@@ -38,6 +38,12 @@
     <ClInclude Include="colision.h">
       <Filter>Файлы заголовков</Filter>
     </ClInclude>
+    <ClInclude Include="way_search.h">
+      <Filter>Файлы заголовков</Filter>
+    </ClInclude>
+    <ClInclude Include="enemy.h">
+      <Filter>Файлы заголовков</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Player.c">
@@ -53,6 +59,12 @@
       <Filter>Исходные файлы</Filter>
     </ClCompile>
     <ClCompile Include="colision.c">
+      <Filter>Исходные файлы</Filter>
+    </ClCompile>
+    <ClCompile Include="way_search.c">
+      <Filter>Исходные файлы</Filter>
+    </ClCompile>
+    <ClCompile Include="enemy.c">
       <Filter>Исходные файлы</Filter>
     </ClCompile>
   </ItemGroup>

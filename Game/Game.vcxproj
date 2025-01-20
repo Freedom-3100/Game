@@ -28,12 +28,16 @@
   <ItemGroup>
     <ClInclude Include="colision.h" />
     <ClInclude Include="draw.h" />
+    <ClInclude Include="enemy.h" />
+    <ClInclude Include="way_search.h" />
     <ClInclude Include="generation.h" />
     <ClInclude Include="Player.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="colision.c" />
     <ClCompile Include="draw.c" />
+    <ClCompile Include="enemy.c" />
+    <ClCompile Include="way_search.c" />
     <ClCompile Include="generation.c" />
     <ClCompile Include="main.c" />
     <ClCompile Include="Player.c" />

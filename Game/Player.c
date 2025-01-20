@@ -84,37 +84,34 @@ void move_player(Player* player, const char* direction) {
     }
 }
 
-float distance(int cord_x_obj_1, int cord_y_obj_1, int cord_x_obj_2, int cord_y_obj_2)
-{
-    return(sqrt((cord_x_obj_1 - cord_x_obj_2) * (cord_x_obj_1 - cord_x_obj_2) + (cord_y_obj_1 - cord_y_obj_2) * (cord_y_obj_1 - cord_y_obj_2)));
-}
+
 
 void move_within_room(Player* player, const char* direction) {
     if (strcmp(direction, "up") == 0 && distance(player->x , player->y , player->x, 0) > 0) {
         if (!check_colision(player->x, player->y - 10, player->currentRoom->room->matix_room))
         {
-            player->y -= 10;
+            player->y -= 5;
         }
          // Перемещение на 5 пикселей вверх
     }
     else if (strcmp(direction, "down") == 0 && distance(player->x, player->y, player->x, WINDOW_HIGH) > 40) {
         if (!check_colision(player->x, player->y + 10, player->currentRoom->room->matix_room))
         {
-            player->y += 10;
+            player->y += 5;
         }
         // Перемещение на 5 пикселей вниз
     }
     else if (strcmp(direction, "left") == 0 && distance(player->x, player->y, 0, player->y) > 0) {
         if (!check_colision(player->x - 10, player->y, player->currentRoom->room->matix_room))
         {
-            player->x -= 10;
+            player->x -= 5;
         }
          // Перемещение на 5 пикселей влево
     }
     else if (strcmp(direction, "right") == 0 && distance(player->x, player->y, WINDOW_WIDTH, player->y) > 30) {
         if (!check_colision(player->x + 10, player->y, player->currentRoom->room->matix_room))
         {
-            player->x += 10;
+            player->x += 5;
         }
         // Перемещение на 5 пикселей вправо
     }

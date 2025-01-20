@@ -33,6 +33,12 @@ Room create_room() {
             }
         }
     }
+    Enemy* enemy = (Enemy*)malloc(sizeof(Enemy));
+    enemy->distance = NULL;
+    Point* enemy_cord = (Point*)malloc(sizeof(Point));
+    enemy_cord = spawn_enemy(room.matix_room);
+    enemy->cur_cords = *enemy_cord;
+    enemy->state = Patrol;
     return room;
 }
 
@@ -200,6 +206,7 @@ void free_bsp_node(BSPNode* node) {
             // Освобождаем память для матрицы комнаты, если она была выделена
             if ((*curr).room->matix_room != NULL) {
                 free((*curr).room->matix_room);
+                free((*curr).room->enemy);
             }
 
             // Освобождаем память для самого узла

@@ -3,13 +3,14 @@
 #include <stdlib.h>
 #include <time.h>
 #include <stdbool.h>
+#include "enemy.h"
 #define TEXTURE_SIZE 40
-#define WINDOW_WIDTH 800
-#define WINDOW_HIGH 600
+
 
 typedef struct Room {
     // Позиция комнаты
     int* matix_room;// матрица 800*600 в которой содержится информация об объектах в комнате
+    Enemy* enemy;
 } Room;
 
 typedef struct BSPNode {
