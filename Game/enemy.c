@@ -41,7 +41,7 @@ static Point* walk_to_point(int* grid, Point cord_enemy, Point cord_player) {
 
 Enemy* state_machine(Enemy* enemy, Point player_cord, int* grid, int* new_calc, int* ind) {
     enemy = check_state(enemy, player_cord);
-
+    
     if (enemy->state == Walk) {
         int new_calculation = distance_to_player(player_cord, enemy->cur_cords);
         
@@ -61,6 +61,10 @@ Enemy* state_machine(Enemy* enemy, Point player_cord, int* grid, int* new_calc, 
             enemy->cur_cords = path[*ind];
             *ind += 1;
             enemy->distance = distance_to_player(enemy->cur_cords, player_cord);
+            if (check_state(enemy, player_cord)->state != Walk)
+            {
+                free(path);
+            }
         }
 
     

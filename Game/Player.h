@@ -2,6 +2,7 @@
 #include <SDL.h>
 #include <SDL_image.h>
 #include <png.h>
+#include <SDL_ttf.h>
 #include "generation.h"
 #include "colision.h"
 #define MAX_IMAGES 3

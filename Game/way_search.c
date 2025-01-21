@@ -14,24 +14,24 @@ bool check_colision_enemy(int cord_x, int cord_y, int* matrix_room)
     }
 }
 
-static int isSafe(int col, int row, int* grid, int** visited) {
+static int is_free(int col, int row, int* grid, int** visited) {
     // Проверяем, находится ли текущая ячейка в пределах границ и свободна ли она
     return (col >= 0 && col < WINDOW_WIDTH && row >= 0 && row < WINDOW_HIGH && grid[row * WINDOW_WIDTH + col] == 0 && !check_colision_enemy(col,row,grid) && !visited[row][col]);
 }
 
-Point* printPath(Point** prev, Point end, int* pathLength) {
+static Point* path_recovery(Point** prev, Point end, int* path_length) {
     // Восстанавливаем путь от конечной точки
     Point* path = (Point*)malloc(WINDOW_HIGH * WINDOW_WIDTH * sizeof(Point));
-    *pathLength = 0;
+    *path_length = 0;
 
-    for (Point at = end; at.x != -1 && at.y != -1; at = prev[at.y][at.x]) {
-        path[(*pathLength)++] = at;
+    for (Point cur_point = end;  cur_point.x != -1 && cur_point.y != -1; cur_point = prev[cur_point.y][cur_point.x]) {
+        path[(*path_length)++] = cur_point;
     }
 
     // Переворачиваем путь для правильного порядка
-    Point* result = (Point*)malloc(*pathLength * sizeof(Point));
-    for (int i = 0; i < *pathLength; i++) {
-        result[i] = path[*pathLength - 1 - i];
+    Point* result = (Point*)malloc(*path_length * sizeof(Point));
+    for (int i = 0; i < *path_length; i++) {
+        result[i] = path[*path_length - 1 - i];
     }
     free(path); // Освобождаем память временного массива
     return result;
@@ -57,23 +57,23 @@ Point* BFS(int* grid, Point start, Point end, int* pathLength) {
     }
 
     // Направления движения (вверх, вниз, влево, вправо)
-    int rowDir[] = { -1, 1, 0, 0 }; // Изменения по y
-    int colDir[] = { 0, 0, -1, 1 }; // Изменения по x
+    int row_dir[] = { -1, 1, 0, 0 }; // Изменения по y
+    int col_dir[] = { 0, 0, -1, 1 }; // Изменения по x
 
     // Создаем очередь для BFS
     Node* queue = (Node*)malloc(WINDOW_HIGH * WINDOW_WIDTH * sizeof(Node));
-    int front = 0, rear = 0;
+    int front = 0, backside = 0;
 
     // Добавляем начальную точку в очередь
-    queue[rear++] = (Node){ start, 0, {-1, -1} };
+    queue[backside++] = (Node){ start, 0, {-1, -1} };
     visited[start.y][start.x] = 1;
 
-    while (front < rear) {
+    while (front < backside) {
         Node current = queue[front++];
 
         // Если достигли конечной точки, восстанавливаем путь
         if (current.pt.x == end.x && current.pt.y == end.y) {
-            Point* path = printPath(prev, end, pathLength);
+            Point* path = path_recovery(prev, end, pathLength);
             free(queue); // Освобождаем память очереди
 
             // Освобождаем память для visited и prev
@@ -89,13 +89,13 @@ Point* BFS(int* grid, Point start, Point end, int* pathLength) {
 
         // Проверяем все возможные направления движения
         for (int i = 0; i < 4; i++) {
-            int newRow = current.pt.y + rowDir[i];
-            int newCol = current.pt.x + colDir[i];
+            int new_row = current.pt.y + row_dir[i];
+            int new_col = current.pt.x + col_dir[i];
 
-            if (isSafe(newCol, newRow, grid, visited)) {
-                visited[newRow][newCol] = 1; // Помечаем как посещенную
-                queue[rear++] = (Node){ {newCol, newRow}, current.dist + 1, current.pt }; // Добавляем в очередь
-                prev[newRow][newCol] = current.pt; // Запоминаем предшественника
+            if (is_free(new_col, new_row, grid, visited)) {
+                visited[new_row][new_col] = 1; // Помечаем как посещенную
+                queue[backside++] = (Node){ {new_col, new_row}, current.dist + 1, current.pt }; // Добавляем в очередь
+                prev[new_row][new_col] = current.pt; // Запоминаем предшественника
             }
         }
     }
