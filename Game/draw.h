@@ -2,7 +2,7 @@
 #include "Player.h"
 #include "generation.h"
 #include "enemy.h"
-typedef enum{Game, Rules, Exit}menu_state;
+typedef enum{Game, Rules, Exit, End}menu_state;
 
 
 menu_state showMenu();

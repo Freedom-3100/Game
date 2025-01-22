@@ -8,8 +8,8 @@
 
 
 typedef struct Room {
-    // Позиция комнаты
-    int* matix_room;// матрица 800*600 в которой содержится информация об объектах в комнате
+
+    int* matix_room;
     Enemy* enemy;
 } Room;
 

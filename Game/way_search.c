@@ -15,12 +15,12 @@ bool check_colision_enemy(int cord_x, int cord_y, int* matrix_room)
 }
 
 static int is_free(int col, int row, int* grid, int** visited) {
-    // Проверяем, находится ли текущая ячейка в пределах границ и свободна ли она
+
     return (col >= 0 && col < WINDOW_WIDTH && row >= 0 && row < WINDOW_HIGH && grid[row * WINDOW_WIDTH + col] == 0 && !check_colision_enemy(col,row,grid) && !visited[row][col]);
 }
 
 static Point* path_recovery(Point** prev, Point end, int* path_length) {
-    // Восстанавливаем путь от конечной точки
+
     Point* path = (Point*)malloc(WINDOW_HIGH * WINDOW_WIDTH * sizeof(Point));
     *path_length = 0;
 
@@ -28,55 +28,52 @@ static Point* path_recovery(Point** prev, Point end, int* path_length) {
         path[(*path_length)++] = cur_point;
     }
 
-    // Переворачиваем путь для правильного порядка
+
     Point* result = (Point*)malloc(*path_length * sizeof(Point));
     for (int i = 0; i < *path_length; i++) {
         result[i] = path[*path_length - 1 - i];
     }
-    free(path); // Освобождаем память временного массива
+    free(path); 
     return result;
 }
 
 Point* BFS(int* grid, Point start, Point end, int* pathLength) {
-    // Выделяем память для массива visited
+
     int** visited = (int**)malloc(WINDOW_HIGH * sizeof(int*));
     for (int i = 0; i < WINDOW_HIGH; i++) {
         visited[i] = (int*)malloc(WINDOW_WIDTH * sizeof(int));
         for (int j = 0; j < WINDOW_WIDTH; j++) {
-            visited[i][j] = 0; // Инициализируем все ячейки как непосещенные
+            visited[i][j] = 0; 
         }
     }
 
-    // Выделяем память для массива prev
     Point** prev = (Point**)malloc(WINDOW_HIGH * sizeof(Point*));
     for (int i = 0; i < WINDOW_HIGH; i++) {
         prev[i] = (Point*)malloc(WINDOW_WIDTH * sizeof(Point));
         for (int j = 0; j < WINDOW_WIDTH; j++) {
-            prev[i][j] = (Point){ -1, -1 }; // Инициализируем предшественников как недоступные
+            prev[i][j] = (Point){ -1, -1 }; 
         }
     }
 
-    // Направления движения (вверх, вниз, влево, вправо)
-    int row_dir[] = { -1, 1, 0, 0 }; // Изменения по y
-    int col_dir[] = { 0, 0, -1, 1 }; // Изменения по x
+    int row_dir[] = { -1, 1, 0, 0 }; 
+    int col_dir[] = { 0, 0, -1, 1 }; 
 
-    // Создаем очередь для BFS
     Node* queue = (Node*)malloc(WINDOW_HIGH * WINDOW_WIDTH * sizeof(Node));
     int front = 0, backside = 0;
 
-    // Добавляем начальную точку в очередь
+
     queue[backside++] = (Node){ start, 0, {-1, -1} };
     visited[start.y][start.x] = 1;
 
     while (front < backside) {
         Node current = queue[front++];
 
-        // Если достигли конечной точки, восстанавливаем путь
+
         if (current.pt.x == end.x && current.pt.y == end.y) {
             Point* path = path_recovery(prev, end, pathLength);
-            free(queue); // Освобождаем память очереди
+            free(queue); 
 
-            // Освобождаем память для visited и prev
+
             for (int i = 0; i < WINDOW_HIGH; i++) {
                 free(visited[i]);
                 free(prev[i]);
@@ -87,24 +84,23 @@ Point* BFS(int* grid, Point start, Point end, int* pathLength) {
             return path;
         }
 
-        // Проверяем все возможные направления движения
+
         for (int i = 0; i < 4; i++) {
             int new_row = current.pt.y + row_dir[i];
             int new_col = current.pt.x + col_dir[i];
 
             if (is_free(new_col, new_row, grid, visited)) {
-                visited[new_row][new_col] = 1; // Помечаем как посещенную
-                queue[backside++] = (Node){ {new_col, new_row}, current.dist + 1, current.pt }; // Добавляем в очередь
-                prev[new_row][new_col] = current.pt; // Запоминаем предшественника
+                visited[new_row][new_col] = 1; 
+                queue[backside++] = (Node){ {new_col, new_row}, current.dist + 1, current.pt }; 
+                prev[new_row][new_col] = current.pt; 
             }
         }
     }
 
-    // Если путь не найден
-    free(queue); // Освобождаем память очереди
+
+    free(queue); 
 
 
-    // Освобождаем память для visited и prev
     for (int i = 0; i < WINDOW_HIGH; i++) {
         free(visited[i]);
         free(prev[i]);

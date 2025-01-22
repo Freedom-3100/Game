@@ -6,12 +6,13 @@
 void init_player(Player* player, int startX, int startY, SDL_Texture* texture[],BSPNode * curr_room)
 {
     player->x = startX;
-    player->y = startY;        // Начальная защита
+    player->y = startY;        
     for (int i = 0; i < MAX_IMAGES; i++) {
-        player->texture[i] = texture[i]; // Копируем текстуры в массив
+        player->texture[i] = texture[i]; 
     }
     player->currentRoom = curr_room;
-    player->current = 0;    // Текстура игрока
+    player->health = 3;
+    player->current = 0;    
 }
 
 
@@ -22,14 +23,15 @@ void render_player(Player* player, SDL_Renderer* renderer, SDL_Rect dstRect)
     SDL_RenderCopy(renderer, player->texture[player->current], NULL, &dstRect);
 }
 
-void move_player(Player* player, const char* direction) {
+void move_player(Player* player, const char* direction , int * lenght) {
     BSPNode* nextRoom = NULL;
 
-    // Проверка направления и наличие двери
+
     if (strcmp(direction, "up") == 0 && player->currentRoom->door_up) {
 
         if (player->currentRoom->up)
         {
+            
             nextRoom = player->currentRoom->up;
         }
         else
@@ -70,14 +72,16 @@ void move_player(Player* player, const char* direction) {
         }
     }
 
-    // Если следующая комната найдена, перемещаем игрока
-    if (nextRoom != NULL) {
-        player->currentRoom = nextRoom; // Переход в новую комнату
-        printf("Moved to the room.\n");
 
-        // Обновляем позицию игрока в центре новой комнаты
-        player->x = WINDOW_WIDTH / 2; // Предполагаем, что ширина комнаты
-        player->y = WINDOW_HIGH / 2; // Предполагаем, что высота комнаты
+    if (nextRoom != NULL) {
+        free(player->currentRoom->room->enemy->queue);
+        player->currentRoom->room->enemy->queue = NULL;
+
+        player->currentRoom = nextRoom;
+        printf("Moved to the room.\n");
+        player->x = WINDOW_WIDTH / 2; 
+        player->y = WINDOW_HIGH / 2; 
+        *lenght = 0;
     }
     else {
         printf("No room to move into.\n");
@@ -92,28 +96,28 @@ void move_within_room(Player* player, const char* direction) {
         {
             player->y -= 5;
         }
-         // Перемещение на 5 пикселей вверх
+
     }
     else if (strcmp(direction, "down") == 0 && distance(player->x, player->y, player->x, WINDOW_HIGH) > 40) {
         if (!check_colision(player->x, player->y + 10, player->currentRoom->room->matix_room))
         {
             player->y += 5;
         }
-        // Перемещение на 5 пикселей вниз
+
     }
     else if (strcmp(direction, "left") == 0 && distance(player->x, player->y, 0, player->y) > 0) {
         if (!check_colision(player->x - 10, player->y, player->currentRoom->room->matix_room))
         {
             player->x -= 5;
         }
-         // Перемещение на 5 пикселей влево
+
     }
     else if (strcmp(direction, "right") == 0 && distance(player->x, player->y, WINDOW_WIDTH, player->y) > 30) {
         if (!check_colision(player->x + 10, player->y, player->currentRoom->room->matix_room))
         {
             player->x += 5;
         }
-        // Перемещение на 5 пикселей вправо
+
     }
 }
 
@@ -141,18 +145,18 @@ void check_doors(Player* player)
         }
     
 }
-void handle_input(Player* player) {
+void handle_input(Player* player, int* lenght) {
     SDL_Event event;
     while (SDL_PollEvent(&event)) {
         if (event.type == SDL_QUIT) {
-            exit(0); // Выход из программы при закрытии окна
+            exit(0); 
         }
         check_doors(player);
         if (event.type == SDL_KEYDOWN) {
             switch (event.key.keysym.scancode) {
             case SDL_SCANCODE_W:
                 if (player->currentRoom->door_up) {
-                    move_player(player, "up");
+                    move_player(player, "up", lenght);
                     player->currentRoom->door_up = 0;
                     player->currentRoom->door_left = 0;
                     player->currentRoom->door_down = 0;
@@ -164,7 +168,7 @@ void handle_input(Player* player) {
                 break;
             case SDL_SCANCODE_A:
                 if ( player->currentRoom->door_left) {
-                    move_player(player, "left");
+                    move_player(player, "left", lenght);
                     player->currentRoom->door_up = 0;
                     player->currentRoom->door_left = 0;
                     player->currentRoom->door_down = 0;
@@ -176,7 +180,7 @@ void handle_input(Player* player) {
                 break;
             case SDL_SCANCODE_S:
                 if ( player->currentRoom->door_down) {
-                    move_player(player, "down");
+                    move_player(player, "down", lenght);
                     player->currentRoom->door_up = 0;
                     player->currentRoom->door_left = 0;
                     player->currentRoom->door_down = 0;
@@ -189,7 +193,7 @@ void handle_input(Player* player) {
                 break;
             case SDL_SCANCODE_D:
                 if (player->currentRoom->door_right) {
-                    move_player(player, "right");
+                    move_player(player, "right", lenght);
                     player->currentRoom->door_up = 0;
                     player->currentRoom->door_left = 0;
                     player->currentRoom->door_down = 0;

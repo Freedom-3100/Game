@@ -1,11 +1,26 @@
+#define _CRTDBG_MAP_ALLOC
+#include <stdlib.h>
+#include <crtdbg.h>
 #include "draw.h"
 
-int main(int argc, char* argv[])
+int main()
 {
+
 	menu_state state = showMenu();
-	if (state == Game)
+
+	while (state != End)
 	{
-		draw();
+		if (state == Game)
+		{
+			draw();
+			state = Exit;
+		}
+		else if (state == Exit)
+		{
+			state = showMenu();
+		}
 	}
+	
+	_CrtDumpMemoryLeaks();
 	return 0;
 }
