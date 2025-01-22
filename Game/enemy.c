@@ -53,7 +53,6 @@ static Enemy* add_bullet(Enemy* enemy, Point player_cord,  int * lenght)
 {
     
     enemy->queue[*lenght] = (Bullet_Queue){ {enemy->cur_cords.x + ENEMY_SIZE, enemy->cur_cords.y}, {player_cord.x + 10, player_cord.y + 10} };
-
     *lenght += 1;
     enemy->is_life = Life;
     return enemy;

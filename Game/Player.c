@@ -78,6 +78,11 @@ void move_player(Player* player, const char* direction , int * lenght) {
         player->currentRoom->room->enemy->queue = NULL;
 
         player->currentRoom = nextRoom;
+        if (player->currentRoom->room->enemy->queue == NULL)
+        {
+            nextRoom->room->enemy->queue = (Bullet_Queue*)malloc(sizeof(Bullet_Queue) * 1);
+            nextRoom->room->enemy->is_life = Dead;
+        }
         printf("Moved to the room.\n");
         player->x = WINDOW_WIDTH / 2; 
         player->y = WINDOW_HIGH / 2; 

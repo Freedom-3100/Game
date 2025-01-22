@@ -4,7 +4,7 @@
 
 bool check_colision_enemy(int cord_x, int cord_y, int* matrix_room)
 {
-    if (matrix_room[cord_y * WINDOW_WIDTH + (cord_x)] == 1 || matrix_room[(cord_y + 30) * WINDOW_WIDTH + (cord_x + 30)] == 1 || matrix_room[cord_y * WINDOW_WIDTH + cord_x + 30] == 1 || matrix_room[(cord_y + 30) * WINDOW_WIDTH + cord_x] == 1)
+    if (cord_x < 0 || cord_y < 0 || cord_x + 30 > WINDOW_WIDTH || cord_y + 30 > WINDOW_HIGH  || matrix_room[(cord_y + 30) * WINDOW_WIDTH + (cord_x + 30)] == 1 || matrix_room[cord_y * WINDOW_WIDTH + cord_x + 30] == 1 || matrix_room[(cord_y + 30) * WINDOW_WIDTH + cord_x] == 1 || matrix_room[cord_y * WINDOW_WIDTH + (cord_x)] == 1 )
     {
         return true;
     }
@@ -16,7 +16,7 @@ bool check_colision_enemy(int cord_x, int cord_y, int* matrix_room)
 
 static int is_free(int col, int row, int* grid, int** visited) {
 
-    return (col >= 0 && col < WINDOW_WIDTH && row >= 0 && row < WINDOW_HIGH && grid[row * WINDOW_WIDTH + col] == 0 && !check_colision_enemy(col,row,grid) && !visited[row][col]);
+    return (col >= 0 && col + 30 < WINDOW_WIDTH && row >= 0 && row + 30 < WINDOW_HIGH && grid[row * WINDOW_WIDTH + col] == 0 && !check_colision_enemy(col,row,grid) && !visited[row][col]);
 }
 
 static Point* path_recovery(Point** prev, Point end, int* path_length) {
