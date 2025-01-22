@@ -11,8 +11,10 @@ static Enemy* create_enemy(Point end, Point start)
 	enemy->distance = distance_to_player(start, end);
     enemy->cur_cords = start;
 	enemy->state = Patrol;
+    enemy->direction = Down;
 	return enemy;
 }
+
 
 
 static Enemy* check_state(Enemy* enemy, Point player_cord)
@@ -38,6 +40,9 @@ static Point* walk_to_point(int* grid, Point cord_enemy, Point cord_player) {
     Point* path = BFS(grid, cord_enemy, cord_player, &lenght);
     return path;
 }
+
+
+
 
 Enemy* state_machine(Enemy* enemy, Point player_cord, int* grid, int* new_calc, int* ind) {
     enemy = check_state(enemy, player_cord);

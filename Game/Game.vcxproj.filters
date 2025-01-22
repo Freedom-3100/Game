@@ -16,9 +16,6 @@
       <UniqueIdentifier>{4FC737F1-C7A5-4376-A066-2A32D752A2FF}</UniqueIdentifier>
       <Extensions>cpp;c;cc;cxx;c++;cppm;ixx;def;odl;idl;hpj;bat;asm;asmx</Extensions>
     </Filter>
-    <Filter Include="sourses\enemy">
-      <UniqueIdentifier>{951373c1-c439-4dc5-8e80-8cf68bb4ab2d}</UniqueIdentifier>
-    </Filter>
     <Filter Include="sourses\player">
       <UniqueIdentifier>{fd134eb2-6f05-4cbc-8e7e-685284d28794}</UniqueIdentifier>
     </Filter>
@@ -27,6 +24,12 @@
     </Filter>
     <Filter Include="sourses\draw">
       <UniqueIdentifier>{911763f2-a3fc-48af-be47-14895b3fefed}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Файлы ресурсов\NewFilter1">
+      <UniqueIdentifier>{c4233805-a4b2-445f-8bf2-4cb9b274dbae}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="sourses\enemy">
+      <UniqueIdentifier>{951373c1-c439-4dc5-8e80-8cf68bb4ab2d}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>

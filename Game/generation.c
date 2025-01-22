@@ -33,12 +33,10 @@ Room create_room() {
             }
         }
     }
-    Enemy* enemy = (Enemy*)malloc(sizeof(Enemy));
-    enemy->distance = NULL;
-    Point* enemy_cord = (Point*)malloc(sizeof(Point));
-    enemy_cord = spawn_enemy(room.matix_room);
-    enemy->cur_cords = *enemy_cord;
-    enemy->state = Patrol;
+    room.enemy = (Enemy*)malloc(sizeof(Enemy));
+    room.enemy->distance = NULL;
+    room.enemy->cur_cords = *spawn_enemy(room.matix_room);
+    room.enemy->state = Patrol;
     return room;
 }
 
@@ -79,42 +77,42 @@ BSPNode* space_split(int line, int column, BSPNode* parent) {
     case 0: // вниз
         if (node->parent && node == node->parent->up)
         {
-            node->left = space_split(line, column - 1, node);
+            node->left = space_split(line - 1, column , node);
         }
         else
         {
-            node->down = space_split(line + 1, column, node);
+            node->down = space_split(line , column + 1, node);
         }
         
         break;
     case 1: // влево
         if (node->parent && node == node->parent->right)
         {
-            node->down = space_split(line + 1, column, node);
+            node->down = space_split(line , column + 1, node);
         }
         else
         {
-            node->left = space_split(line, column - 1, node);
+            node->left = space_split(line - 1, column , node);
         }
         break;
     case 2: // вверх
         if (node->parent && node == node->parent->down)
         {
-            node->right = space_split(line, column + 1, node);
+            node->right = space_split(line + 1, column , node);
         }
         else
         {
-            node->up = space_split(line - 1, column, node);
+            node->up = space_split(line , column - 1, node);
         }
         break;
     case 3: // вправо
         if (node->parent && node == node->parent->left)
         {
-            node->up = space_split(line - 1, column, node);
+            node->up = space_split(line , column - 1, node);
         }
         else
         {
-            node->right = space_split(line, column + 1, node);
+            node->right = space_split(line + 1, column , node);
         }
         break;
     }

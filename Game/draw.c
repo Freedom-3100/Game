@@ -1,5 +1,26 @@
 #include "draw.h"
 
+#include <SDL.h>
+#include <SDL_ttf.h>
+#include <stdio.h>
+
+
+
+void drawText(SDL_Renderer* renderer, TTF_Font* font, const char* text, int x, int y, SDL_Color color) {
+    SDL_Surface* surface = TTF_RenderText_Solid(font, text, color);
+    SDL_Texture* texture = SDL_CreateTextureFromSurface(renderer, surface);
+
+    int text_width = surface->w;
+    int text_height = surface->h;
+    SDL_Rect dstrect = { x, y, text_width, text_height };
+
+    SDL_RenderCopy(renderer, texture, NULL, &dstrect);
+    SDL_FreeSurface(surface);
+    SDL_DestroyTexture(texture);
+}
+
+
+
 
 static void draw_enemy(SDL_Renderer* renderer, Point enemy_cord)
 
@@ -8,6 +29,7 @@ static void draw_enemy(SDL_Renderer* renderer, Point enemy_cord)
     SDL_Rect enemy_rect = { enemy_cord.x , enemy_cord.y  , ENEMY_SIZE , ENEMY_SIZE };
     SDL_RenderFillRect(renderer, &enemy_rect);
 }
+
 
 
 static void draw_rooms(SDL_Renderer* renderer, BSPNode* room) {
@@ -100,3 +122,86 @@ void draw()
     SDL_Quit();
 
 }
+
+
+menu_state showMenu() {
+    SDL_Init(SDL_INIT_VIDEO);
+    TTF_Init();
+    menu_state state = Exit;
+    SDL_Window* window = SDL_CreateWindow("Game Menu", SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED, WINDOW_WIDTH, WINDOW_HIGH, SDL_WINDOW_SHOWN);
+    SDL_Renderer* renderer = SDL_CreateRenderer(window, -1, SDL_RENDERER_ACCELERATED);
+
+    TTF_Font* font = TTF_OpenFont("C:/Games/sample.ttf", 24);
+    if (!font) {
+        printf("Failed to load font: %s\n", TTF_GetError());
+        return;
+    }
+
+    SDL_Color textColor = { 255, 255, 255, 255 }; // белый цвет
+
+    int menu = 1;
+    SDL_Event event;
+
+    while (menu) {
+        while (SDL_PollEvent(&event)) {
+            if (event.type == SDL_QUIT) {
+                menu = 0;
+            }
+            if (event.type == SDL_KEYDOWN) {
+                switch (event.key.keysym.sym) {
+                case SDLK_ESCAPE:
+                    menu = 0;
+                    break;
+                case SDLK_1:
+                    printf("Start Game");
+
+                     state = Game;
+
+                    menu = 0;
+                    break;
+                case SDLK_2:
+                    printf("Options\n");
+                    state = Rules;
+
+                    break;
+                case SDLK_3:
+                    printf("Exit\n");
+                    state = Exit;
+                    break;
+                }
+            }
+        }
+
+        SDL_SetRenderDrawColor(renderer, 0, 0, 0, 255); // черный фон
+        SDL_RenderClear(renderer);
+
+        if (state == Exit)
+        {
+            drawText(renderer, font, "Game Menu", 300, 100, textColor);
+            drawText(renderer, font, "Press 1. Start Game", 300, 200, textColor);
+            drawText(renderer, font, "Press 2. Rules", 300, 300, textColor);
+            
+        }
+        else if (state == Rules)
+        {
+            drawText(renderer, font, "Managment: W,A,S,D", 300, 100, textColor);
+            drawText(renderer, font, "White blocks are an obstacle", 300, 200, textColor);
+            drawText(renderer, font, "Red blocks are an enemy", 300, 300, textColor);
+            drawText(renderer, font, "Yellow blocks are an doors to next room", 300, 400, textColor);
+            drawText(renderer, font, "Press 3. Menu", 300, 500, textColor);
+        }
+
+        SDL_RenderPresent(renderer);
+    }
+
+    TTF_CloseFont(font);
+    SDL_DestroyRenderer(renderer);
+    SDL_DestroyWindow(window);
+
+    TTF_Quit();
+    SDL_Quit();
+    return state;
+}
+
+
+

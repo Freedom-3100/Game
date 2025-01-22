@@ -2,6 +2,10 @@
 
 int main(int argc, char* argv[])
 {
-	draw();
+	menu_state state = showMenu();
+	if (state == Game)
+	{
+		draw();
+	}
 	return 0;
 }
