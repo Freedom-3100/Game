@@ -98,30 +98,30 @@ Enemy* check_collision_bullet(Enemy* enemy, Point player_cord, int* lenght, Dama
 Enemy* state_machine(Enemy* enemy, Point player_cord, int* grid, int* new_calc, int* ind, int* length) {
     enemy = check_state(enemy, player_cord);
 
-    static Point* path = NULL;            // Статическая переменная для хранения пути
-    static Point last_player_cord = { 0 };  // Последние известные координаты игрока
-    static int path_calculation_counter = 0; // Счётчик для редкого вызова walk_to_point
+    static Point* path = NULL;         
+    static Point last_player_cord = { 0 };  
+    static int path_calculation_counter = 0; 
 
     if (enemy->state == Walk) {
         int new_calculation = distance_to_player(player_cord, enemy->cur_cords);
 
-        // Проверяем, изменилось ли положение игрока или пора ли пересчитывать путь
+
         if (path == NULL || (player_cord.x != last_player_cord.x ||  player_cord.y != last_player_cord.y) ||
             path_calculation_counter >= WALK_UPDATE_INTERVAL) {
 
                 if (path != NULL) {
-                    free(path);  // Освобождаем предыдущий путь
+                    free(path); 
                 }
 
-                path = walk_to_point(grid, enemy->cur_cords, player_cord);  // Генерируем новый путь
-                last_player_cord = player_cord;  // Обновляем координаты игрока
-                path_calculation_counter = 0;    // Сбрасываем счётчик
+                path = walk_to_point(grid, enemy->cur_cords, player_cord);  
+                last_player_cord = player_cord;  
+                path_calculation_counter = 0;    
         }
 
-        // Увеличиваем счётчик для редких обновлений пути
+
         path_calculation_counter++;
 
-        // Уточняем необходимость обновления пути в зависимости от расстояния
+
         if (new_calculation <= RANGE_LITTLE) {
             if (path != NULL) {
                 free(path);
@@ -136,16 +136,16 @@ Enemy* state_machine(Enemy* enemy, Point player_cord, int* grid, int* new_calc, 
             *new_calc -= 40;
         }
 
-        // Перемещение врага по рассчитанному пути
+
         if (path != NULL && *ind < WINDOW_HIGH * WINDOW_WIDTH) {
             enemy->cur_cords = path[*ind];
             (*ind)++;
             enemy->distance = distance_to_player(enemy->cur_cords, player_cord);
 
-            // Проверяем, если состояние врага изменилось
+
             if (check_state(enemy, player_cord)->state != Walk) {
                 free(path);
-                path = NULL;  // Обнуляем указатель
+                path = NULL;  
             }
         }
     }
@@ -175,7 +175,7 @@ static int is_area_free(int* grid, int start_row, int start_col) {
 
 
 Point spawn_enemy(int* grid) {
-    Point spawn_point = { -1, -1 }; // Инициализация недопустимыми координатами
+    Point spawn_point = { -1, -1 }; 
     for (int row = 0; row <= WINDOW_HIGH - ENEMY_SIZE; row++) {
         for (int col = 0; col <= WINDOW_WIDTH - ENEMY_SIZE; col++) {
             if (is_area_free(grid, row, col)) {
@@ -185,5 +185,5 @@ Point spawn_enemy(int* grid) {
             }
         }
     }
-    return spawn_point; // Возвращаем недопустимый Point, если не найдено место
+    return spawn_point; 
 }
