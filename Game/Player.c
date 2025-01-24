@@ -6,7 +6,11 @@
 void init_player(Player* player, int startX, int startY, SDL_Texture* texture[],BSPNode * curr_room)
 {
     player->x = startX;
-    player->y = startY;        
+    player->y = startY;
+    while (check_colision(player->x, player->y,curr_room->room->matix_room))
+    {
+        player->x += 10;
+    }    
     for (int i = 0; i < MAX_IMAGES; i++) {
         player->texture[i] = texture[i]; 
     }
@@ -84,8 +88,12 @@ void move_player(Player* player, const char* direction , int * lenght) {
             nextRoom->room->enemy->is_life = Dead;
         }
         printf("Moved to the room.\n");
-        player->x = WINDOW_WIDTH / 2; 
-        player->y = WINDOW_HIGH / 2; 
+        player->x = WINDOW_WIDTH / 2;
+        player->y = WINDOW_HIGH / 2;
+        while (check_colision(player->x, player->y, player->currentRoom->room->matix_room))
+        {
+            player->x += 10;
+        }
         *lenght = 0;
     }
     else {
